@@ -1,0 +1,12 @@
+name = "wuhu-site-router"
+main = "worker.js"
+compatibility_date = "2024-01-01"
+account_id = "476ba1878542c080b6bf4a771719d1fd"
+
+[[r2_buckets]]
+binding = "BUCKET"
+bucket_name = "wuhu-site"
+
+[[routes]]
+pattern = "wuhu.ai/*"
+zone_name = "wuhu.ai"

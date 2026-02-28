@@ -6,6 +6,8 @@ Static website for [wuhu.ai](https://wuhu.ai).
 
 - **[Astro](https://astro.build/)** — static site generator
 - **[Starlight](https://starlight.astro.build/)** — documentation theme for Astro
+- **[Cloudflare R2](https://developers.cloudflare.com/r2/)** — static file hosting
+- **[Cloudflare Workers](https://developers.cloudflare.com/workers/)** — index.html routing
 - Node 22+
 
 ## Development
@@ -19,8 +21,23 @@ npm run preview  # preview the production build locally
 
 ## Deployment
 
-The site is deployed to **Cloudflare R2** as a static asset bucket. Deployment
-configuration is managed separately and is not part of this repo.
+The site is hosted on **Cloudflare R2** with a **Cloudflare Worker** for
+index.html routing (R2 doesn't natively serve index documents for bare paths).
+
+- **R2 bucket**: `wuhu-site`
+- **Worker**: `wuhu-site-router` (source in `worker/`)
+- **Domain**: `wuhu.ai` (custom domain bound to the R2 bucket)
+
+Use `wrangler whoami` to verify auth and find the account ID.
+
+CI automatically builds and deploys to R2 on push to `main`. The deploy
+script at `scripts/deploy.sh` uploads the `dist/` output to the R2 bucket.
+
+To deploy the Worker manually:
+
+```bash
+cd worker && wrangler deploy
+```
 
 ## Structure
 
@@ -33,6 +50,8 @@ src/
       guides/       # Guides (getting started, architecture, etc.)
   assets/           # Images and other assets
 public/             # Static files served as-is (favicon, etc.)
+worker/             # Cloudflare Worker for index.html routing
+scripts/            # Deployment scripts
 astro.config.mjs    # Astro + Starlight configuration
 ```
 
