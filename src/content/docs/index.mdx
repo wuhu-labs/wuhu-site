@@ -1,40 +1,50 @@
 ---
-title: Welcome to Starlight
-description: Get started building your docs site with Starlight.
-template: splash # Remove or comment out this line to display the site sidebar on this page.
+title: Wuhu
+description: A coding agent that runs locally on your Mac.
+template: splash
 hero:
-  tagline: Congrats on setting up a new Starlight project!
-  image:
-    file: ../../assets/houston.webp
+  tagline: A coding agent that runs locally on your Mac.
   actions:
-    - text: Example Guide
-      link: /guides/example/
+    - text: Get Started
+      link: /guides/getting-started/
       icon: right-arrow
-    - text: Read the Starlight docs
-      link: https://starlight.astro.build
-      icon: external
+    - text: Download
+      link: /download/
       variant: minimal
 ---
 
 import { Card, CardGrid } from '@astrojs/starlight/components';
 
-## Next steps
+## What is Wuhu?
 
-<CardGrid stagger>
-	<Card title="Update content" icon="pencil">
-		Edit `src/content/docs/index.mdx` to see this page change.
+Wuhu is an AI coding agent built for developers who want powerful AI assistance
+without giving up control. It runs **locally on your Mac** as a native Swift
+app — no Docker, no containers, no remote servers required.
+
+<CardGrid>
+	<Card title="Local-first" icon="laptop">
+		Your code stays on your machine. Wuhu runs as a native macOS app with
+		full access to your local filesystem, tools, and environment.
 	</Card>
-	<Card title="Change page layout" icon="document">
-		Delete `template: splash` in `src/content/docs/index.mdx` to display a
-		sidebar on this page.
+	<Card title="Swift-native" icon="apple">
+		Built from the ground up in Swift for macOS and iOS. Fast, lightweight,
+		and feels right at home on Apple platforms.
 	</Card>
-	<Card title="Add new content" icon="add-document">
-		Add Markdown or MDX files to `src/content/docs` to create new pages.
+	<Card title="Multi-provider LLMs" icon="random">
+		Connect to Anthropic, OpenAI, or other providers through a unified
+		client library. Bring your own API keys.
 	</Card>
-	<Card title="Configure your site" icon="setting">
-		Edit your `sidebar` and other config in `astro.config.mjs`.
-	</Card>
-	<Card title="Read the docs" icon="open-book">
-		Learn more in [the Starlight Docs](https://starlight.astro.build/).
+	<Card title="Workspace-aware" icon="magnifier">
+		Wuhu understands your project structure. It scans and indexes your
+		workspace so the agent has the context it needs.
 	</Card>
 </CardGrid>
+
+## Platforms
+
+Wuhu is available on **macOS 15+** and **iOS 18+**.
+
+- **macOS** — full-featured desktop app with terminal integration
+- **iOS** — mobile companion for reviewing and steering agent sessions on the go
+
+Ready to try it? [Get started →](/guides/getting-started/)
