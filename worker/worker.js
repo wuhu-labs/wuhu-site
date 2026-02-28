@@ -3,19 +3,19 @@ export default {
     const url = new URL(request.url);
     let key = url.pathname.slice(1); // strip leading /
 
-    // DocC root redirect: /docs/<package>/ or /docs/<package> should redirect
-    // to the documentation page, not serve the bare SPA shell.
-    const doccRootMatch =
-      key.match(/^(docs\/[^/]+)\/?$/) ||
-      (key === "" ? null : null);
-    if (doccRootMatch) {
-      const metaObj = await env.BUCKET.get(doccRootMatch[1] + "/metadata.json");
+    // DocC root redirect: any path under docs/ that has a metadata.json
+    // should redirect to /documentation/<module> instead of serving the
+    // bare SPA shell. This handles both single-target (docs/wuhu-ai/)
+    // and multi-target (docs/wuhu-core/WuhuAPI/) layouts.
+    if (key.startsWith("docs/")) {
+      const cleanKey = key.replace(/\/+$/, ""); // strip trailing slashes
+      const metaObj = await env.BUCKET.get(cleanKey + "/metadata.json");
       if (metaObj) {
         const meta = await metaObj.json();
         const moduleName = meta.bundleDisplayName?.toLowerCase();
         if (moduleName) {
           return Response.redirect(
-            url.origin + "/" + doccRootMatch[1] + "/documentation/" + moduleName,
+            url.origin + "/" + cleanKey + "/documentation/" + moduleName,
             302,
           );
         }
@@ -37,14 +37,16 @@ export default {
         return respond(indexObject);
       }
 
-      // DocC SPA fallback: for paths under docs/<package>/ that look like
-      // navigation routes (no file extension), serve the package's index.html
-      // so the DocC Vue SPA can handle client-side routing.
-      const doccMatch = key.match(/^(docs\/[^/]+)\//);
-      if (doccMatch && !hasFileExtension(key)) {
-        const doccIndex = await env.BUCKET.get(doccMatch[1] + "/index.html");
-        if (doccIndex) {
-          return respond(doccIndex);
+      // DocC SPA fallback: for paths under docs/ that look like navigation
+      // routes (no file extension), find the nearest DocC root (the one with
+      // metadata.json) and serve its index.html for client-side routing.
+      if (key.startsWith("docs/") && !hasFileExtension(key)) {
+        const doccRoot = await findDoccRoot(key, env);
+        if (doccRoot) {
+          const doccIndex = await env.BUCKET.get(doccRoot + "/index.html");
+          if (doccIndex) {
+            return respond(doccIndex);
+          }
         }
       }
 
@@ -62,6 +64,22 @@ export default {
     return respond(object);
   },
 };
+
+// Walk up the path to find the nearest directory with a metadata.json
+async function findDoccRoot(key, env) {
+  const parts = key.split("/");
+  // Start from the deepest possible DocC root and walk up
+  // e.g. for docs/wuhu-core/WuhuAPI/documentation/wuhuapi
+  // try: docs/wuhu-core/WuhuAPI, docs/wuhu-core, docs
+  for (let i = parts.length - 1; i >= 2; i--) {
+    const candidate = parts.slice(0, i).join("/");
+    const meta = await env.BUCKET.head(candidate + "/metadata.json");
+    if (meta) {
+      return candidate;
+    }
+  }
+  return null;
+}
 
 function hasFileExtension(path) {
   const lastSegment = path.split("/").pop() || "";
