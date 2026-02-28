@@ -33,13 +33,18 @@ export default defineConfig({
 					label: 'API Reference',
 					items: [
 						{
-							label: 'wuhu-ai',
+							label: 'wuhu-ai (PiAI)',
 							link: '/docs/wuhu-ai/',
 							attrs: { target: '_blank' },
 						},
 						{
 							label: 'wuhu-core',
 							link: '/docs/wuhu-core/',
+							attrs: { target: '_blank' },
+						},
+						{
+							label: 'wuhu-workspace-engine',
+							link: '/docs/wuhu-workspace-engine/',
 							attrs: { target: '_blank' },
 						},
 					],

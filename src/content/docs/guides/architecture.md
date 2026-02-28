@@ -81,8 +81,9 @@ reviewing changes.
 
 Each package publishes its own API docs via DocC. These are hosted separately:
 
-- [`wuhu-ai` API Reference →](/docs/wuhu-ai/)
-- [`wuhu-core` API Reference →](/docs/wuhu-core/)
+- [`wuhu-ai` (PiAI) →](/docs/wuhu-ai/)
+- [`wuhu-core` →](/docs/wuhu-core/)
+- [`wuhu-workspace-engine` →](/docs/wuhu-workspace-engine/)
 
 ## Source code
 
