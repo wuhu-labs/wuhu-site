@@ -6,19 +6,43 @@ import starlight from '@astrojs/starlight';
 export default defineConfig({
 	integrations: [
 		starlight({
-			title: 'My Docs',
-			social: [{ icon: 'github', label: 'GitHub', href: 'https://github.com/withastro/starlight' }],
+			title: 'Wuhu',
+			defaultLocale: 'root',
+			social: [
+				{
+					icon: 'github',
+					label: 'GitHub',
+					href: 'https://github.com/wuhu-labs',
+				},
+			],
+			customCss: [],
 			sidebar: [
 				{
-					label: 'Guides',
-					items: [
-						// Each item here is one entry in the navigation menu.
-						{ label: 'Example Guide', slug: 'guides/example' },
-					],
+					label: 'Getting Started',
+					slug: 'guides/getting-started',
 				},
 				{
-					label: 'Reference',
-					autogenerate: { directory: 'reference' },
+					label: 'Architecture',
+					slug: 'guides/architecture',
+				},
+				{
+					label: 'Download',
+					slug: 'download',
+				},
+				{
+					label: 'API Reference',
+					items: [
+						{
+							label: 'wuhu-ai',
+							link: '/docs/wuhu-ai/',
+							attrs: { target: '_blank' },
+						},
+						{
+							label: 'wuhu-core',
+							link: '/docs/wuhu-core/',
+							attrs: { target: '_blank' },
+						},
+					],
 				},
 			],
 		}),
