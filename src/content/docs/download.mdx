@@ -8,16 +8,17 @@ import { Card, CardGrid } from '@astrojs/starlight/components';
 ## macOS
 
 Wuhu for macOS is a notarized app distributed as a `.zip` archive. Download,
-unzip, and drag to your Applications folder.
+unzip, and drag to your Applications folder. The app checks for updates
+automatically using [Sparkle](https://sparkle-project.org/) — you'll get a
+native update prompt whenever a new version is available.
 
-<a href="#" class="sl-flex" style="display:inline-block;padding:0.5rem 1rem;border-radius:0.5rem;background:var(--sl-color-accent);color:var(--sl-color-black);text-decoration:none;font-weight:600;">
+<a href="https://wuhu.ai/releases/macos/WuhuAppMac-latest.zip" class="sl-flex" style="display:inline-block;padding:0.5rem 1rem;border-radius:0.5rem;background:var(--sl-color-accent);color:var(--sl-color-black);text-decoration:none;font-weight:600;">
 	Download for macOS (Apple Silicon)
 </a>
 
-### System requirements
-
-- macOS 15 (Sequoia) or later
-- Apple Silicon (M1 or later) recommended
+<p style="font-size:0.85rem;color:var(--sl-color-gray-3);margin-top:0.5rem;">
+	Version 1.0 · Requires macOS 15 (Sequoia) or later
+</p>
 
 ### Installation
 
@@ -26,6 +27,12 @@ unzip, and drag to your Applications folder.
 3. Drag **Wuhu.app** into your `/Applications` folder
 4. Open Wuhu from Applications — on first launch, macOS may ask you to confirm
    since the app was downloaded from the internet
+
+### Updating
+
+Wuhu includes automatic updates. When a new version is available, you'll see a
+native update dialog. You can also check manually from the **Wuhu → Check for
+Updates…** menu.
 
 ---
 
