@@ -30,10 +30,13 @@ index.html routing (R2 doesn't natively serve index documents for bare paths).
 
 Use `wrangler whoami` to verify auth and find the account ID.
 
-CI automatically builds and deploys to R2 on push to `main`. The deploy
-script at `scripts/deploy.sh` uploads the `dist/` output to the R2 bucket.
+CI automatically builds and deploys to R2 on push to `main`, and also
+redeploys the Worker from `worker/`. The deploy script at
+`scripts/deploy.sh` uploads the `dist/` output to the R2 bucket; the
+Worker is deployed with `wrangler deploy`. After deploy, CI runs
+`scripts/smoke-worker.sh` against production to verify routing.
 
-To deploy the Worker manually:
+To deploy the Worker manually (e.g. from this machine):
 
 ```bash
 cd worker && wrangler deploy
