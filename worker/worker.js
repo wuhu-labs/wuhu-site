@@ -30,11 +30,18 @@ export default {
     const object = await env.BUCKET.get(key);
 
     if (!object) {
-      // Try with /index.html appended (for paths like /download without trailing slash)
+      // Try with /index.html appended (for paths like /download without trailing slash).
+      // Serving the index body here would work, but the browser's URL bar would stay on
+      // the slash-less path, so any relative links inside the page (e.g. `href="foo/"`)
+      // would resolve against the parent directory and 404. Redirect to the canonical
+      // trailing-slash form instead — same behavior as S3 website hosting, GitHub Pages,
+      // etc. Preserve the query string and hash.
       const indexKey = key + "/index.html";
-      const indexObject = await env.BUCKET.get(indexKey);
+      const indexObject = await env.BUCKET.head(indexKey);
       if (indexObject) {
-        return respond(indexObject);
+        const canonical = new URL(url);
+        canonical.pathname = url.pathname + "/";
+        return Response.redirect(canonical.toString(), 301);
       }
 
       // DocC SPA fallback: for paths under docs/ that look like navigation
