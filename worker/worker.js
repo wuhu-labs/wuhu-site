@@ -99,7 +99,24 @@ function respond(object) {
   headers.set("etag", object.httpEtag);
   headers.set(
     "content-type",
-    object.httpMetadata?.contentType || "application/octet-stream",
+    contentTypeFor(object.key) ||
+      object.httpMetadata?.contentType ||
+      "application/octet-stream",
   );
   return new Response(object.body, { headers });
+}
+
+// Override content-type for keys whose stored metadata is unhelpful. The
+// alignment pipeline `aws s3 sync`s Swift interfaces and `.patch` files into
+// R2 with the default `application/octet-stream`, which makes the browser
+// download them instead of rendering inline. Force them to text/plain so the
+// dashboard links are actually browsable.
+function contentTypeFor(key) {
+  if (!key) return null;
+  if (key.startsWith("alignment/")) {
+    if (key.endsWith(".swift") || key.endsWith(".patch")) {
+      return "text/plain; charset=utf-8";
+    }
+  }
+  return null;
 }

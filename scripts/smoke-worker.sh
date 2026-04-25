@@ -57,6 +57,26 @@ probe "deep commit/$sha/ (200)"              "$BASE/alignment/commit/$sha/"   20
 probe "buggy form /commit/$sha/ (should 404)" "$BASE/commit/$sha/"            404
 
 echo
+echo "→ Alignment .swift inline (text/plain, not octet-stream download)"
+# Pull the snapshot index page and find any .swift href to probe.
+swift_key="$(curl -sS "$BASE/alignment/commit/$sha/" | python3 -c '
+import re, sys
+m = re.search(r"href=\"(interfaces/[^\"]+\.swift)\"", sys.stdin.read())
+print(m.group(1) if m else "")
+')"
+if [[ -n "$swift_key" ]]; then
+  swift_url="$BASE/alignment/commit/$sha/$swift_key"
+  ctype="$(curl -sS -o /dev/null -w '%{content_type}' "$swift_url")"
+  if [[ "$ctype" == text/plain* ]]; then
+    pass "swift inline content-type=$ctype ($swift_key)"
+  else
+    fail "swift content-type expected text/plain*, got '$ctype' ($swift_url)"
+  fi
+else
+  fail "could not locate a .swift interface under commit/$sha/"
+fi
+
+echo
 echo "→ Query & hash preservation on redirect"
 out="$(curl -sS -o /dev/null -w '%{redirect_url}' "$BASE/alignment?foo=bar")"
 if [[ "$out" == *"/alignment/"* && "$out" == *"foo=bar"* ]]; then
